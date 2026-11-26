@@ -27,7 +27,9 @@ class MahasiswaController extends BaseController
         $data = [
             'nim'   => $this->request->getPost('nim'),
             'nama'  => $this->request->getPost('nama'),
+            'email' => $this->request->getPost('email'),
             'prodi' => $this->request->getPost('prodi'),
+            'angkatan' => $this->request->getPost('angkatan'),
             'ipk'   => $this->request->getPost('ipk'),
         ];
         $model->insert($data);

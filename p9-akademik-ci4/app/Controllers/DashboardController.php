@@ -15,6 +15,6 @@ class DashboardController extends BaseController
             'jumlahMK' => 40,
             'jumlahKRS' => 350
         ];
-        return view('dashboard', $data);
+        return view( 'dashboard', $data);
     }
 }
