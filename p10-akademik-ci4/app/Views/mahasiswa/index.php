@@ -1,87 +1,135 @@
-<!DOCTYPE html>
-<html>
+<?= $this->extend('layouts/template'); ?>
 
-<head>
-    <title>Data Mahasiswa</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-</head>
+<?= $this->section('content'); ?>
 
-<body>
-    <div class="container">
-        <div class="nav nav-pills mb-4">
-            <a class="nav-link active" href="<?= base_url('mahasiswa'); ?>">Mahasiswa</a>
-            <a class="nav-link" href="#">Dosen</a>
-            <a class="nav-link" href="#">Mata Kuliah</a>
-        </div>
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3 mb-4">
-            <div class="col">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h3 class="card-title">Mahasiswa</h3>
-                        <p class="card-text fs-4 mb-0">120</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h3 class="card-title">Dosen</h3>
-                        <p class="card-text fs-4 mb-0">25</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h3 class="card-title">Mata Kuliah</h3>
-                        <p class="card-text fs-4 mb-0">40</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h3 class="card-title">KRS</h3>
-                        <p class="card-text fs-4 mb-0">350</p>
-                    </div>
-                </div>
+<h2 class="fw-bold mb-1">Dashboard Akademik</h2>
+<p class="text-secondary">Informasi data mahasiswa</p>
+
+<!-- GRID SYSTEM -->
+<div class="row g-3 mb-4">
+
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <h6 class="text-secondary">Total Mahasiswa</h6>
+                <h2 class="text-primary fw-bold">
+                    <?= $jumlahMahasiswa; ?>
+                </h2>
             </div>
         </div>
-        <hr class="divider">
-        <h2>Data Mahasiswa</h2>
-        <a href="<?= base_url('mahasiswa/tambah'); ?>" 
-            class="btn btn-primary">
-            Tambah Mahasiswa
-        </a>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <h6 class="text-secondary">Program Studi</h6>
+                <h2 class="text-success fw-bold">
+                    <?= $jumlahProdi; ?>
+                </h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- TABLE -->
+<div class="card shadow-sm border-0">
+
+    <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <h5 class="fw-bold">Data Mahasiswa</h5>
+
+            <a href="<?= base_url('mahasiswa/tambah'); ?>"
+               class="btn btn-primary">
+                + Tambah Mahasiswa
+            </a>
+
+        </div>
+
+        <?php if (session()->getFlashdata('success')): ?>
+            <div class="alert alert-success">
+                <?= session()->getFlashdata('success'); ?>
+            </div>
+        <?php endif; ?>
+
         <div class="table-responsive">
-            <table class="table table-striped table-hover align-middle">
-                <thead class="table-light">
+
+            <table class="table table-bordered table-striped table-hover">
+
+                <thead class="table-dark">
                     <tr>
+                        <th>No</th>
                         <th>NIM</th>
                         <th>Nama</th>
                         <th>Email</th>
                         <th>Prodi</th>
                         <th>Angkatan</th>
                         <th>IPK</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
+
                 <tbody>
-                    <?php foreach ($mahasiswa as $mhs): ?>
+
+                    <?php if (!empty($mahasiswa)): ?>
+
+                        <?php $no = 1; ?>
+
+                        <?php foreach ($mahasiswa as $mhs): ?>
+
+                            <tr>
+                                <td><?= $no++; ?></td>
+                                <td><?= esc($mhs['nim']); ?></td>
+                                <td><?= esc($mhs['nama']); ?></td>
+                                <td><?= esc($mhs['email']); ?></td>
+                                <td><?= esc($mhs['prodi']); ?></td>
+                                <td><?= esc($mhs['angkatan']); ?></td>
+                                <td><?= esc($mhs['ipk']); ?></td>
+
+                                <td class="text-nowrap">
+
+                                    <a href="<?= base_url('mahasiswa/edit/'.$mhs['nim']); ?>"
+                                       class="btn btn-warning btn-sm">
+                                        Edit
+                                    </a>
+
+                                    <form action="<?= base_url('mahasiswa/hapus/'.$mhs['nim']); ?>"
+                                          method="post"
+                                          class="d-inline"
+                                          onsubmit="return confirm('Yakin ingin menghapus?')">
+
+                                        <?= csrf_field(); ?>
+
+                                        <button type="submit"
+                                                class="btn btn-danger btn-sm">
+                                            Hapus
+                                        </button>
+
+                                    </form>
+
+                                </td>
+                            </tr>
+
+                        <?php endforeach; ?>
+
+                    <?php else: ?>
+
                         <tr>
-                            <td><?= esc($mhs['nim']); ?></td>
-                            <td><?= esc($mhs['nama']); ?></td>
-                            <td><?= esc($mhs['email']); ?></td>
-                            <td><?= esc($mhs['prodi']); ?></td>
-                            <td><?= esc($mhs['angkatan']); ?></td>
-                            <td><?= esc($mhs['ipk']); ?></td>
+                            <td colspan="8" class="text-center">
+                                Belum ada data mahasiswa
+                            </td>
                         </tr>
-                    <?php endforeach; ?>
+
+                    <?php endif; ?>
+
                 </tbody>
+
             </table>
+
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</body>
+</div>
 
-</html>
+<?= $this->endSection(); ?>
